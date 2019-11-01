@@ -1,19 +1,20 @@
 import { SimplexNoise } from "./SimplexNoise.js"
-var moveRight: number
-var moveUp: number
-var moveLeft: number
-var moveDown: number
+var moveRight: number[] = []
+var moveUp: number[] = []
+var moveLeft: number[] = []
+var moveDown: number[] = []
+var moveSpeed = 10
 function scroll(event: WheelEvent) {
     const delta = event.deltaY;
-    const map = document.getElementById("map")
+    const map = document.getElementById("scrollContainer")
     const scaleStr = map.style.transform ? map.style.transform : "scale(1)"
     const scale = Number(scaleStr.slice(6, scaleStr.indexOf(")")))
     if (delta > 0) {
-        map.style.transformOrigin = "center"
-        map.style.transform = `scale(${scale * .9})`
+        map.style.transform = `scale(${scale * 1/1.1})`
+        moveSpeed *= 1.1
     } else if (delta < 0) {
-        map.style.transformOrigin = "center"
         map.style.transform = `scale(${scale * 1.1})`
+        moveSpeed *= 1/1.1
     }
 }
 
@@ -21,64 +22,60 @@ function keyDown(event: KeyboardEvent) {
     if (event.repeat) {
         return
     }
-    console.log(event.code)
     const map = document.getElementById("map")
     switch (event.code) {
         case "KeyS":
-                if (event.repeat) {
-                    clearInterval(moveDown)
-                }
-            moveDown = setInterval(function () {
+            moveDown.push(setInterval(function () {
                 const topStr = map.style.top ? map.style.top : "0px"
                 const top = Number(topStr.slice(0, topStr.indexOf("p")))
-                map.style.top = `${top - 1}px`
-            }, 5)
+                map.style.top = `${top - moveSpeed}px`
+            }, 5))
             break;
         case "KeyW":
-                if (event.repeat) {
-                    clearInterval(moveUp)
-                }
-            moveUp = setInterval(function () {
+            moveUp.push(setInterval(function () {
                 const topStr = map.style.top ? map.style.top : "0px"
                 const top = Number(topStr.slice(0, topStr.indexOf("p")))
-                map.style.top = `${top + 1}px`
-            }, 5)
+                map.style.top = `${top + moveSpeed}px`
+
+            }, 5))
             break;
         case "KeyA":
-                if (event.repeat) {
-                    clearInterval(moveLeft)
-                }
-            moveLeft = setInterval(function () {
+            moveLeft.push(setInterval(function () {
                 const leftStr = map.style.left ? map.style.left : "0px"
                 const left = Number(leftStr.slice(0, leftStr.indexOf("p")))
-                map.style.left = `${left + 1}px`
-            }, 5)
+                map.style.left = `${left + moveSpeed}px`
+            }, 5))
             break;
         case "KeyD":
-                if (event.repeat) {
-                    clearInterval(moveRight)
-                }
-            moveRight = setInterval(function () {
+            moveRight.push(setInterval(function () {
                 const leftStr = map.style.left ? map.style.left : "0px"
                 const left = Number(leftStr.slice(0, leftStr.indexOf("p")))
-                map.style.left = `${left - 1}px`
-            }, 5)
+                map.style.left = `${left - moveSpeed}px`
+            }, 5))
     }
 }
 
 function keyUp(event: KeyboardEvent) {
     switch (event.code) {
         case "KeyS":
-            clearInterval(moveDown)
+            for (let interval of moveDown) {
+                clearInterval(interval)
+            }
             break;
         case "KeyW":
-            clearInterval(moveUp)
+            for (let interval of moveUp) {
+                clearInterval(interval)
+            }
             break;
         case "KeyA":
-            clearInterval(moveLeft)
+            for (let interval of moveLeft) {
+                clearInterval(interval)
+            }
             break;
         case "KeyD":
-            clearInterval(moveRight)
+            for (let interval of moveRight) {
+                clearInterval(interval)
+            }
     }
 }
 
@@ -107,7 +104,7 @@ const map = []
 for (let i = 0; i < 33; i++) {
     const row = []
     for (let j = 0; j < 99; j++) {
-        row.push(sumOcatave(noise, 16, i, j / 3, .5, .05))
+        row.push(sumOcatave(noise, 16, i, j / 3, .6, .05))
     }
     map.push(row)
 }
@@ -120,9 +117,9 @@ blue.src = "BlueHex.png"
 
 for (let i = 0; i < 99; i++) {
     for (let j = 0; j < 33; j++) {
-        const x =  (i % 2 == 0) ? j * 150 : j * 150 + 75
+        const x = (i % 2 == 0) ? j * 150 : j * 150 + 75
         const y = 50 * i
-        const img = new Image(100,100)
+        const img = new Image(100, 100)
         img.src = (map[j][i] > .1) ? "GreenHex.png" : "BlueHex.png"
         img.style.left = `${x}px`
         img.style.top = `${y}px`
@@ -130,3 +127,10 @@ for (let i = 0; i < 99; i++) {
         document.getElementById("map").appendChild(img)
     }
 }
+
+setInterval(function () {
+
+})
+document.getElementById("map").style.left = "-2000px"
+document.getElementById("map").style.top = "-2000px"
+document.getElementById("scrollContainer").style.transformOrigin = "center"
