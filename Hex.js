@@ -29,11 +29,16 @@ class Hex extends Image {
             Hex.border.style.position = Hex.ABSOLUTE;
             Hex.border.style.zIndex = Hex.ZIDX;
             Hex.map.style.zIndex = Hex.ZIDX;
+            Hex.border.style.pointerEvents = "none";
             Hex.map.appendChild(Hex.border);
         }
         this.addEventListener(Hex.MOUSE_OVER, function () {
             Hex.border.style.left = `${x}${Hex.PX}`;
             Hex.border.style.top = `${y}${Hex.PX}`;
+        });
+        const that = this;
+        this.addEventListener("mousedown", function () {
+            that.src = "VillageHex.png";
         });
     }
 }
