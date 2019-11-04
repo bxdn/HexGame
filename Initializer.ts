@@ -25,7 +25,7 @@ class Initializer {
     private static readonly HEX_COUNT_X = 33
     private static readonly HEX_COUNT_Y = 99
     private static readonly HEX_WIDTH = 100
-    private static readonly PERSISTANCE = .6
+    private static readonly PERSISTANCE = .5
     private static readonly NOISE_SCALE = .05
     private static readonly NUM_OCTAVES = 16
     private static readonly SCALE_FACTOR = 1.2

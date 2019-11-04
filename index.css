@@ -1,0 +1,20 @@
+.tabFolder{
+    height: 50%;
+    width: 100%;
+    box-sizing: border-box;
+    border-top: 10px solid white
+}
+.menu{
+    width: 25%; 
+    height: 100%; 
+    background: black
+}
+#mapContainer{
+    height:100%; 
+    width:50%; 
+    border: 10px solid white; 
+    overflow: hidden; 
+    background-color: black; 
+    position: relative; 
+    box-sizing: border-box
+}
