@@ -21,7 +21,7 @@ class Initializer {
     private static readonly MAP = document.getElementById("map")
 
     private static readonly MAP_INITIAL_X = -2000
-    private static readonly MAP_INITIAL_Y = -2000
+    private static readonly MAP_INITIAL_Y = -1900
     private static readonly HEX_COUNT_X = 33
     private static readonly HEX_COUNT_Y = 99
     private static readonly HEX_WIDTH = 100
@@ -35,7 +35,7 @@ class Initializer {
     private static readonly MOVE_UP: number[] = []
     private static readonly MOVE_LEFT: number[] = []
     private static readonly MOVE_DOWN: number[] = []
-    private static moveSpeed = 15
+    private static moveSpeed = 100
 
     static initialize() {
         Initializer.assignListeners()

@@ -10,23 +10,23 @@
 </head>
 
 <body style="margin: 0; height:100%; width: 100%; display:flex; flex-direction: row; justify-content: center; align-items: center;">
-    <div class="menu">
-        <div class="tabFolder">
+    <div id = "leftMenu" class="menu">
+        <div id = "topLeftMenu" class="tabFolder">
+            Choose your starting point!
         </div>
-        <div class="tabFolder">
+        <div id = "bottomLeftMenu" class="tabFolder">
         </div>
     </div>
     <div id="mapContainer">
-        <div id="scrollContainer" style="height:100%; width: 100%; position: absolute">
+        <div id="scrollContainer" style="height:100%; width: 100%; position: absolute; transform: scale(.15)">
             <div id="map" style="position:absolute;">
-                Loading
             </div>
         </div>
     </div>
-    <div class="menu">
-        <div class="tabFolder">
+    <div id = "rightMenu" class="menu">
+        <div id = "topRightMenu" class="tabFolder">
         </div>
-        <div class="tabFolder">
+        <div id = "bottomRightMenu" class="tabFolder">
         </div>
     </div>
 </body>
