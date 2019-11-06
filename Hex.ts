@@ -19,28 +19,44 @@ class Hex extends Image {
     private static readonly OCEAN_THRESH = .05
     private static readonly MOUNTAIN_THRESH = .35
 
-    constructor(x: number, y: number, z: number, biome: Biome) {
+    public static instances: Hex[] = []
+    private _x: number = null
+    private _y: number = null
+    private _z: number = null
+    private _biome: Biome = null
+
+    constructor(x: number, y: number, z: number, biome: Biome, src?: string) {
         super(Hex.IMG_DIM, Hex.IMG_DIM)
+        Hex.instances.push(this)
+        this._x = x
+        this._y = y
+        this._z = z
+        this._biome = biome
         this.style.position = Hex.ABSOLUTE
         this.style.left = `${x}${Hex.PX}`
         this.style.top = `${y}${Hex.PX}`
-        if (z < Hex.OCEAN_THRESH) {
-            this.src = Hex.BLUE_HEX_IMG
-        }
-        else if (z < Hex.MOUNTAIN_THRESH) {
-            switch (biome) {
-                case Biome.Desert:
-                    this.src = Hex.YELLOW_HEX_IMG
-                    break
-                case Biome.Plains:
-                    this.src = Hex.GREEN_HEX_IMG
-                    break
-                case Biome.Forest:
-                    this.src = Hex.FOREST_HEX_IMG
-            }
+        if (src) {
+            this.src = src
         }
         else {
-            this.src = Hex.GRAY_HEX_IMG
+            if (z < Hex.OCEAN_THRESH) {
+                this.src = Hex.BLUE_HEX_IMG
+            }
+            else if (z < Hex.MOUNTAIN_THRESH) {
+                switch (biome) {
+                    case Biome.Desert:
+                        this.src = Hex.YELLOW_HEX_IMG
+                        break
+                    case Biome.Plains:
+                        this.src = Hex.GREEN_HEX_IMG
+                        break
+                    case Biome.Forest:
+                        this.src = Hex.FOREST_HEX_IMG
+                }
+            }
+            else {
+                this.src = Hex.GRAY_HEX_IMG
+            }
         }
         if (Hex.border == null) {
             Hex.border = new Image(100, 100)
@@ -57,9 +73,21 @@ class Hex extends Image {
             Hex.border.style.top = `${y}${Hex.PX}`
         })
         const that = this
-        this.addEventListener("mousedown", function(){
+        this.addEventListener("mousedown", function () {
             that.src = "VillageHex.png"
         })
+    }
+    public getX(): number {
+        return this._x
+    }
+    public getY(): number {
+        return this._y
+    }
+    public getZ(): number {
+        return this._z
+    }
+    public getSource(): String {
+        return this.src
     }
 }
 export { Hex }

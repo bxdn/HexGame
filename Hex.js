@@ -1,27 +1,41 @@
 import { Biome } from "./Biome.js";
 class Hex extends Image {
-    constructor(x, y, z, biome) {
+    constructor(x, y, z, biome, src) {
         super(Hex.IMG_DIM, Hex.IMG_DIM);
+        this._x = null;
+        this._y = null;
+        this._z = null;
+        this._biome = null;
+        Hex.instances.push(this);
+        this._x = x;
+        this._y = y;
+        this._z = z;
+        this._biome = biome;
         this.style.position = Hex.ABSOLUTE;
         this.style.left = `${x}${Hex.PX}`;
         this.style.top = `${y}${Hex.PX}`;
-        if (z < Hex.OCEAN_THRESH) {
-            this.src = Hex.BLUE_HEX_IMG;
-        }
-        else if (z < Hex.MOUNTAIN_THRESH) {
-            switch (biome) {
-                case Biome.Desert:
-                    this.src = Hex.YELLOW_HEX_IMG;
-                    break;
-                case Biome.Plains:
-                    this.src = Hex.GREEN_HEX_IMG;
-                    break;
-                case Biome.Forest:
-                    this.src = Hex.FOREST_HEX_IMG;
-            }
+        if (src) {
+            this.src = src;
         }
         else {
-            this.src = Hex.GRAY_HEX_IMG;
+            if (z < Hex.OCEAN_THRESH) {
+                this.src = Hex.BLUE_HEX_IMG;
+            }
+            else if (z < Hex.MOUNTAIN_THRESH) {
+                switch (biome) {
+                    case Biome.Desert:
+                        this.src = Hex.YELLOW_HEX_IMG;
+                        break;
+                    case Biome.Plains:
+                        this.src = Hex.GREEN_HEX_IMG;
+                        break;
+                    case Biome.Forest:
+                        this.src = Hex.FOREST_HEX_IMG;
+                }
+            }
+            else {
+                this.src = Hex.GRAY_HEX_IMG;
+            }
         }
         if (Hex.border == null) {
             Hex.border = new Image(100, 100);
@@ -41,6 +55,18 @@ class Hex extends Image {
             that.src = "VillageHex.png";
         });
     }
+    getX() {
+        return this._x;
+    }
+    getY() {
+        return this._y;
+    }
+    getZ() {
+        return this._z;
+    }
+    getSource() {
+        return this.src;
+    }
 }
 Hex.GREEN_HEX_IMG = "GreenHex.png";
 Hex.BLUE_HEX_IMG = "BlueHex.png";
@@ -57,4 +83,5 @@ Hex.ZIDX = "1000";
 Hex.MOUSE_OVER = "mouseover";
 Hex.OCEAN_THRESH = .05;
 Hex.MOUNTAIN_THRESH = .35;
+Hex.instances = [];
 export { Hex };

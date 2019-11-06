@@ -9,24 +9,37 @@
     <title>Hex Game!</title>
 </head>
 
-<body style="margin: 0; height:100%; width: 100%; display:flex; flex-direction: row; justify-content: center; align-items: center;">
-    <div id = "leftMenu" class="menu">
-        <div id = "topLeftMenu" class="tabFolder">
-            Choose your starting point!
+<body
+    style="margin: 0; height:100%; width: 100%; display:flex; flex-direction: row; justify-content: center; align-items: center;">
+    <div id="leftMenu" class="menu">
+        <div id="topLeftMenu" class="tabFolder">
+            <div id="saves">
+                <div class="button" id="saveButton">
+                    save
+                </div>
+                <div class="button" id="clearButton">
+                    clear
+                </div>
+            </div>
+            <div id="prompts">
+                <div id="prompt">
+                        Choose your starting point!
+                </div>
+            </div>
         </div>
-        <div id = "bottomLeftMenu" class="tabFolder">
+        <div id="bottomLeftMenu" class="tabFolder">
         </div>
     </div>
     <div id="mapContainer">
-        <div id="scrollContainer" style="height:100%; width: 100%; position: absolute; transform: scale(.15)">
-            <div id="map" style="position:absolute;">
+        <div id="scrollContainer" style="height:100%; width: 100%; position: absolute; transform: scale(.2)">
+            <div id="map">
             </div>
         </div>
     </div>
-    <div id = "rightMenu" class="menu">
-        <div id = "topRightMenu" class="tabFolder">
+    <div id="rightMenu" class="menu">
+        <div id="topRightMenu" class="tabFolder">
         </div>
-        <div id = "bottomRightMenu" class="tabFolder">
+        <div id="bottomRightMenu" class="tabFolder">
         </div>
     </div>
 </body>

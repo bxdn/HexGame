@@ -19,6 +19,9 @@ class Initializer {
     private static readonly SCROLL_CONTAINER = document.getElementById("scrollContainer")
     private static readonly MAP_CONTAINER = document.getElementById("mapContainer")
     private static readonly MAP = document.getElementById("map")
+    private static readonly topLeftMenu = document.getElementById("topLeftMenu")
+    private static readonly saveBtn = document.getElementById("saveButton")
+    private static readonly clearBtn = document.getElementById("clearButton")
 
     private static readonly MAP_INITIAL_X = -2000
     private static readonly MAP_INITIAL_Y = -1900
@@ -35,11 +38,19 @@ class Initializer {
     private static readonly MOVE_UP: number[] = []
     private static readonly MOVE_LEFT: number[] = []
     private static readonly MOVE_DOWN: number[] = []
-    private static moveSpeed = 100
+    private static moveSpeed = 150
 
     static initialize() {
         Initializer.assignListeners()
-        Initializer.buildHexMap(Initializer.createNoiseMap(), Initializer.createBiomeMap())
+        if (localStorage.getItem("map")) {
+            const map = JSON.parse(localStorage.getItem("map"))
+            for (let hex of map) {
+                Initializer.MAP.appendChild(new Hex(hex[0], hex[1], hex[2], null, hex[3]))
+            }
+        }
+        else {
+            Initializer.buildHexMap(Initializer.createNoiseMap(), Initializer.createBiomeMap())
+        }
         Initializer.initializeMapPosition()
     }
 
@@ -47,6 +58,20 @@ class Initializer {
         Initializer.MAP_CONTAINER.addEventListener(Initializer.WHEEL, Initializer.scroll)
         window.addEventListener(Initializer.KEYDOWN, Initializer.keyDown)
         window.addEventListener(Initializer.KEYUP, Initializer.keyUp)
+        Initializer.saveBtn.addEventListener("mousedown", Initializer.save)
+        Initializer.clearBtn.addEventListener("mousedown", Initializer.clear)
+    }
+
+    private static clear() {
+        localStorage.removeItem("map")
+    }
+
+    private static save() {
+        let map = []
+        for (let hex of Hex.instances) {
+            map.push([hex.getX(), hex.getY(), hex.getZ(), hex.getSource()])
+        }
+        localStorage.setItem("map", JSON.stringify(map))
     }
 
     private static createNoiseMap(): number[][] {
@@ -104,6 +129,12 @@ class Initializer {
         Initializer.MAP.style.left = `${Initializer.MAP_INITIAL_X}${Initializer.PX}`
         Initializer.MAP.style.top = `${Initializer.MAP_INITIAL_Y}${Initializer.PX}`
         Initializer.SCROLL_CONTAINER.style.transformOrigin = Initializer.CENTER
+        setTimeout(function () {
+            Initializer.MAP.style.opacity = "1"
+            setTimeout(function () {
+                Initializer.topLeftMenu.style.opacity = "1"
+            }, 1000)
+        }, 1000)
     }
 
     private static sumOcatave(noiseGen: SimplexNoise, num_iterations: number, x: number, y: number, persistence: number, scale: number): number {
@@ -143,7 +174,7 @@ class Initializer {
                     const topStr = Initializer.MAP.style.top ? Initializer.MAP.style.top : Initializer.ZERO
                     const top = Number(topStr.slice(0, topStr.indexOf(Initializer.P)))
                     Initializer.MAP.style.top = `${top - Initializer.moveSpeed}${Initializer.PX}`
-                }, 5))
+                }, 20))
                 break;
             case Initializer.KEYW:
                 Initializer.MOVE_UP.push(setInterval(function () {
@@ -151,21 +182,21 @@ class Initializer {
                     const top = Number(topStr.slice(0, topStr.indexOf(Initializer.P)))
                     Initializer.MAP.style.top = `${top + Initializer.moveSpeed}${Initializer.PX}`
 
-                }, 5))
+                }, 20))
                 break;
             case Initializer.KEYA:
                 Initializer.MOVE_LEFT.push(setInterval(function () {
                     const leftStr = Initializer.MAP.style.left ? Initializer.MAP.style.left : Initializer.ZERO
                     const left = Number(leftStr.slice(0, leftStr.indexOf(Initializer.P)))
                     Initializer.MAP.style.left = `${left + Initializer.moveSpeed}${Initializer.PX}`
-                }, 5))
+                }, 20))
                 break;
             case Initializer.KEYD:
                 Initializer.MOVE_RIGHT.push(setInterval(function () {
                     const leftStr = Initializer.MAP.style.left ? Initializer.MAP.style.left : Initializer.ZERO
                     const left = Number(leftStr.slice(0, leftStr.indexOf(Initializer.P)))
                     Initializer.MAP.style.left = `${left - Initializer.moveSpeed}${Initializer.PX}`
-                }, 5))
+                }, 20))
         }
     }
 
