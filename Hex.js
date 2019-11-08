@@ -54,7 +54,10 @@ class Hex extends Image {
             Hex.border.style.top = `${y}${Hex.PX}`;
         });
         const that = this;
-        this.addEventListener("mousedown", function () {
+        this.addEventListener("mousedown", function (event) {
+            if (event.button != 0) {
+                return;
+            }
             that.src = "housing.png";
         });
         Hex.map.appendChild(this);
