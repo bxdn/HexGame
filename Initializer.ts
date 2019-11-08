@@ -27,7 +27,8 @@ class Initializer {
     private static readonly MAP_INITIAL_Y = -1900
     private static readonly HEX_COUNT_X = 33
     private static readonly HEX_COUNT_Y = 99
-    private static readonly HEX_WIDTH = 100
+    private static readonly HEX_WIDTH = 96
+    private static readonly HEX_HEIGHT = 84
     private static readonly PERSISTANCE = .5
     private static readonly NOISE_SCALE = .05
     private static readonly NUM_OCTAVES = 16
@@ -38,7 +39,7 @@ class Initializer {
     private static readonly MOVE_UP: number[] = []
     private static readonly MOVE_LEFT: number[] = []
     private static readonly MOVE_DOWN: number[] = []
-    private static moveSpeed = 150
+    private static moveSpeed = 100
 
     static initialize() {
         Initializer.assignListeners()
@@ -100,7 +101,7 @@ class Initializer {
         for (let i = 0; i < Initializer.HEX_COUNT_Y; i++) {
             for (let j = 0; j < Initializer.HEX_COUNT_X; j++) {
                 const x = (i % 2 == 0) ? j * Initializer.HEX_WIDTH * 1.5 : j * Initializer.HEX_WIDTH * 1.5 + Initializer.HEX_WIDTH * .75
-                const y = Initializer.HEX_WIDTH / 2 * i
+                const y = Initializer.HEX_HEIGHT / 2 * i
                 const z = NoiseMap[j][i]
                 const biome = Initializer.getBiome(j, i, biomeMap)
                 Initializer.MAP.appendChild(new Hex(x, y, z, biome))

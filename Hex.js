@@ -21,7 +21,7 @@ class Hex extends Image {
             if (z < Hex.OCEAN_THRESH) {
                 this.src = Hex.BLUE_HEX_IMG;
             }
-            else if (z < Hex.MOUNTAIN_THRESH) {
+            else if (z < Hex.HILLS_THRESH) {
                 switch (biome) {
                     case Biome.Desert:
                         this.src = Hex.YELLOW_HEX_IMG;
@@ -32,6 +32,9 @@ class Hex extends Image {
                     case Biome.Forest:
                         this.src = Hex.FOREST_HEX_IMG;
                 }
+            }
+            else if (z < Hex.MOUNTAIN_THRESH) {
+                this.src = Hex.HILLS_HEX_IMG;
             }
             else {
                 this.src = Hex.GRAY_HEX_IMG;
@@ -52,7 +55,7 @@ class Hex extends Image {
         });
         const that = this;
         this.addEventListener("mousedown", function () {
-            that.src = "VillageHex.png";
+            that.src = "housing.png";
         });
     }
     getX() {
@@ -68,20 +71,22 @@ class Hex extends Image {
         return this.src;
     }
 }
-Hex.GREEN_HEX_IMG = "GreenHex.png";
-Hex.BLUE_HEX_IMG = "BlueHex.png";
-Hex.YELLOW_HEX_IMG = "YellowHex.png";
-Hex.GRAY_HEX_IMG = "GrayHex.png";
-Hex.FOREST_HEX_IMG = "ForestHex.png";
+Hex.GREEN_HEX_IMG = "grass.png";
+Hex.BLUE_HEX_IMG = "water.png";
+Hex.YELLOW_HEX_IMG = "sand.png";
+Hex.GRAY_HEX_IMG = "mountain.png";
+Hex.FOREST_HEX_IMG = "trees.png";
+Hex.HILLS_HEX_IMG = "hills.png";
 Hex.BORDER_HEX_IMG = "BorderHex.png";
 Hex.ABSOLUTE = "absolute";
 Hex.PX = "px";
-Hex.IMG_DIM = 100;
+Hex.IMG_DIM = 96;
 Hex.border = null;
 Hex.map = document.getElementById("map");
 Hex.ZIDX = "1000";
 Hex.MOUSE_OVER = "mouseover";
 Hex.OCEAN_THRESH = .05;
-Hex.MOUNTAIN_THRESH = .35;
+Hex.HILLS_THRESH = .35;
+Hex.MOUNTAIN_THRESH = .45;
 Hex.instances = [];
 export { Hex };

@@ -56,7 +56,7 @@ class Initializer {
         for (let i = 0; i < Initializer.HEX_COUNT_Y; i++) {
             for (let j = 0; j < Initializer.HEX_COUNT_X; j++) {
                 const x = (i % 2 == 0) ? j * Initializer.HEX_WIDTH * 1.5 : j * Initializer.HEX_WIDTH * 1.5 + Initializer.HEX_WIDTH * .75;
-                const y = Initializer.HEX_WIDTH / 2 * i;
+                const y = Initializer.HEX_HEIGHT / 2 * i;
                 const z = NoiseMap[j][i];
                 const biome = Initializer.getBiome(j, i, biomeMap);
                 Initializer.MAP.appendChild(new Hex(x, y, z, biome));
@@ -197,7 +197,8 @@ Initializer.MAP_INITIAL_X = -2000;
 Initializer.MAP_INITIAL_Y = -1900;
 Initializer.HEX_COUNT_X = 33;
 Initializer.HEX_COUNT_Y = 99;
-Initializer.HEX_WIDTH = 100;
+Initializer.HEX_WIDTH = 96;
+Initializer.HEX_HEIGHT = 84;
 Initializer.PERSISTANCE = .5;
 Initializer.NOISE_SCALE = .05;
 Initializer.NUM_OCTAVES = 16;
@@ -207,5 +208,5 @@ Initializer.MOVE_RIGHT = [];
 Initializer.MOVE_UP = [];
 Initializer.MOVE_LEFT = [];
 Initializer.MOVE_DOWN = [];
-Initializer.moveSpeed = 150;
+Initializer.moveSpeed = 100;
 export { Initializer };

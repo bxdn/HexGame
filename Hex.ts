@@ -1,15 +1,16 @@
 import { Biome } from "./Biome.js"
 class Hex extends Image {
-    private static readonly GREEN_HEX_IMG = "GreenHex.png"
-    private static readonly BLUE_HEX_IMG = "BlueHex.png"
-    private static readonly YELLOW_HEX_IMG = "YellowHex.png"
-    private static readonly GRAY_HEX_IMG = "GrayHex.png"
-    private static readonly FOREST_HEX_IMG = "ForestHex.png"
+    private static readonly GREEN_HEX_IMG = "grass.png"
+    private static readonly BLUE_HEX_IMG = "water.png"
+    private static readonly YELLOW_HEX_IMG = "sand.png"
+    private static readonly GRAY_HEX_IMG = "mountain.png"
+    private static readonly FOREST_HEX_IMG = "trees.png"
+    private static readonly HILLS_HEX_IMG = "hills.png"
     private static readonly BORDER_HEX_IMG = "BorderHex.png"
 
     private static readonly ABSOLUTE = "absolute"
     private static readonly PX = "px"
-    private static readonly IMG_DIM = 100
+    private static readonly IMG_DIM = 96
     private static border: HTMLImageElement = null
 
     private static readonly map = document.getElementById("map")
@@ -17,7 +18,8 @@ class Hex extends Image {
     private static readonly MOUSE_OVER = "mouseover"
 
     private static readonly OCEAN_THRESH = .05
-    private static readonly MOUNTAIN_THRESH = .35
+    private static readonly HILLS_THRESH = .35
+    private static readonly MOUNTAIN_THRESH = .45
 
     public static instances: Hex[] = []
     private _x: number = null
@@ -42,7 +44,7 @@ class Hex extends Image {
             if (z < Hex.OCEAN_THRESH) {
                 this.src = Hex.BLUE_HEX_IMG
             }
-            else if (z < Hex.MOUNTAIN_THRESH) {
+            else if (z < Hex.HILLS_THRESH) {
                 switch (biome) {
                     case Biome.Desert:
                         this.src = Hex.YELLOW_HEX_IMG
@@ -53,6 +55,9 @@ class Hex extends Image {
                     case Biome.Forest:
                         this.src = Hex.FOREST_HEX_IMG
                 }
+            }
+            else if (z < Hex.MOUNTAIN_THRESH) {
+                this.src = Hex.HILLS_HEX_IMG
             }
             else {
                 this.src = Hex.GRAY_HEX_IMG
@@ -74,7 +79,7 @@ class Hex extends Image {
         })
         const that = this
         this.addEventListener("mousedown", function () {
-            that.src = "VillageHex.png"
+            that.src = "housing.png"
         })
     }
     public getX(): number {
