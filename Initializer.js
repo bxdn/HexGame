@@ -4,23 +4,54 @@ import { Biome } from "./Biome.js";
 class Initializer {
     static initialize() {
         Initializer.assignListeners();
+        var hexMap = null;
         if (localStorage.getItem("map")) {
             const map = JSON.parse(localStorage.getItem("map"));
-            for (let hex of map) {
-                Initializer.MAP.appendChild(new Hex(hex[0], hex[1], hex[2], null, hex[3]));
+            hexMap = [];
+            for (let hexData of map) {
+                const hex = new Hex(hexData[0], hexData[1], hexData[2], null, hexData[3]);
+                hexMap.push(hex);
             }
         }
         else {
-            Initializer.buildHexMap(Initializer.createNoiseMap(), Initializer.createBiomeMap());
+            hexMap = Initializer.buildHexMap(Initializer.createNoiseMap(), Initializer.createBiomeMap());
         }
         Initializer.initializeMapPosition();
+        return hexMap;
     }
     static assignListeners() {
         Initializer.MAP_CONTAINER.addEventListener(Initializer.WHEEL, Initializer.scroll);
+        Initializer.MAP.addEventListener("mousedown", Initializer.toggleDrag);
+        Initializer.MAP.addEventListener("contextmenu", Initializer.preventContextMenu);
         window.addEventListener(Initializer.KEYDOWN, Initializer.keyDown);
         window.addEventListener(Initializer.KEYUP, Initializer.keyUp);
         Initializer.saveBtn.addEventListener("mousedown", Initializer.save);
         Initializer.clearBtn.addEventListener("mousedown", Initializer.clear);
+    }
+    static preventContextMenu(event) {
+        event.preventDefault();
+    }
+    static toggleDrag(event) {
+        if (event.button != 2) {
+            return;
+        }
+        Initializer.mouseX = event.clientX;
+        Initializer.mouseY = event.clientY;
+        Initializer.MAP.addEventListener("mouseup", Initializer.stopDrag);
+        Initializer.MAP.addEventListener("mousemove", Initializer.drag);
+    }
+    static drag(event) {
+        const scaleStr = Initializer.SCROLL_CONTAINER.style.transform ? Initializer.SCROLL_CONTAINER.style.transform : `${Initializer.SCALE}1${Initializer.CLOSE_PAREN}`;
+        const scale = Number(scaleStr.slice(6, scaleStr.indexOf(Initializer.CLOSE_PAREN)));
+        const deltaX = (Initializer.mouseX - event.clientX) / scale;
+        const deltaY = (Initializer.mouseY - event.clientY) / scale;
+        Initializer.mouseX = event.clientX;
+        Initializer.mouseY = event.clientY;
+        Initializer.MAP.style.left = (Initializer.MAP.offsetLeft - deltaX) + Initializer.PX;
+        Initializer.MAP.style.top = (Initializer.MAP.offsetTop - deltaY) + Initializer.PX;
+    }
+    static stopDrag() {
+        Initializer.MAP.removeEventListener("mousemove", Initializer.drag);
     }
     static clear() {
         localStorage.removeItem("map");
@@ -53,15 +84,18 @@ class Initializer {
         return map;
     }
     static buildHexMap(NoiseMap, biomeMap) {
+        const hexMap = [];
         for (let i = 0; i < Initializer.HEX_COUNT_Y; i++) {
             for (let j = 0; j < Initializer.HEX_COUNT_X; j++) {
                 const x = (i % 2 == 0) ? j * Initializer.HEX_WIDTH * 1.5 : j * Initializer.HEX_WIDTH * 1.5 + Initializer.HEX_WIDTH * .75;
                 const y = Initializer.HEX_HEIGHT / 2 * i;
                 const z = NoiseMap[j][i];
                 const biome = Initializer.getBiome(j, i, biomeMap);
-                Initializer.MAP.appendChild(new Hex(x, y, z, biome));
+                const hex = new Hex(x, y, z, biome);
+                hexMap.push(hex);
             }
         }
+        return hexMap;
     }
     static getBiome(x, y, biomeMap) {
         var closestPoint = biomeMap[0];
@@ -209,4 +243,6 @@ Initializer.MOVE_UP = [];
 Initializer.MOVE_LEFT = [];
 Initializer.MOVE_DOWN = [];
 Initializer.moveSpeed = 100;
+Initializer.mouseX = null;
+Initializer.mouseY = null;
 export { Initializer };

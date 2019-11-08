@@ -81,6 +81,7 @@ class Hex extends Image {
         this.addEventListener("mousedown", function () {
             that.src = "housing.png"
         })
+        Hex.map.appendChild(this)
     }
     public getX(): number {
         return this._x

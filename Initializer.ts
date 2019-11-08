@@ -40,27 +40,64 @@ class Initializer {
     private static readonly MOVE_LEFT: number[] = []
     private static readonly MOVE_DOWN: number[] = []
     private static moveSpeed = 100
+    private static mouseX: number = null
+    private static mouseY: number = null
 
-    static initialize() {
+    static initialize(): Hex[] {
         Initializer.assignListeners()
+        var hexMap = null
         if (localStorage.getItem("map")) {
             const map = JSON.parse(localStorage.getItem("map"))
-            for (let hex of map) {
-                Initializer.MAP.appendChild(new Hex(hex[0], hex[1], hex[2], null, hex[3]))
+            hexMap = []
+            for (let hexData of map) {
+                const hex = new Hex(hexData[0], hexData[1], hexData[2], null, hexData[3])
+                hexMap.push(hex)
             }
         }
         else {
-            Initializer.buildHexMap(Initializer.createNoiseMap(), Initializer.createBiomeMap())
+            hexMap = Initializer.buildHexMap(Initializer.createNoiseMap(), Initializer.createBiomeMap())
         }
         Initializer.initializeMapPosition()
+        return hexMap
     }
 
     private static assignListeners() {
         Initializer.MAP_CONTAINER.addEventListener(Initializer.WHEEL, Initializer.scroll)
+        Initializer.MAP.addEventListener("mousedown", Initializer.toggleDrag)
+        Initializer.MAP.addEventListener("contextmenu",Initializer.preventContextMenu)
         window.addEventListener(Initializer.KEYDOWN, Initializer.keyDown)
         window.addEventListener(Initializer.KEYUP, Initializer.keyUp)
         Initializer.saveBtn.addEventListener("mousedown", Initializer.save)
         Initializer.clearBtn.addEventListener("mousedown", Initializer.clear)
+    }
+
+    private static preventContextMenu(event: MouseEvent){
+        event.preventDefault()
+    }
+
+    private static toggleDrag(event: MouseEvent) {
+        if(event.button != 2){
+            return
+        }
+        Initializer.mouseX = event.clientX
+        Initializer.mouseY = event.clientY
+        Initializer.MAP.addEventListener("mouseup", Initializer.stopDrag)
+        Initializer.MAP.addEventListener("mousemove", Initializer.drag)
+    }
+
+    private static drag(event: MouseEvent){
+        const scaleStr = Initializer.SCROLL_CONTAINER.style.transform ? Initializer.SCROLL_CONTAINER.style.transform : `${Initializer.SCALE}1${Initializer.CLOSE_PAREN}`
+        const scale = Number(scaleStr.slice(6, scaleStr.indexOf(Initializer.CLOSE_PAREN)))
+        const deltaX = (Initializer.mouseX - event.clientX) / scale
+        const deltaY = (Initializer.mouseY - event.clientY) / scale
+        Initializer.mouseX = event.clientX
+        Initializer.mouseY = event.clientY
+        Initializer.MAP.style.left = (Initializer.MAP.offsetLeft - deltaX) + Initializer.PX
+        Initializer.MAP.style.top = (Initializer.MAP.offsetTop - deltaY) + Initializer.PX
+    }
+
+    private static stopDrag() {
+        Initializer.MAP.removeEventListener("mousemove", Initializer.drag)
     }
 
     private static clear() {
@@ -97,16 +134,19 @@ class Initializer {
         return map
     }
 
-    private static buildHexMap(NoiseMap: number[][], biomeMap: number[][]) {
+    private static buildHexMap(NoiseMap: number[][], biomeMap: number[][]): Hex[] {
+        const hexMap = []
         for (let i = 0; i < Initializer.HEX_COUNT_Y; i++) {
             for (let j = 0; j < Initializer.HEX_COUNT_X; j++) {
                 const x = (i % 2 == 0) ? j * Initializer.HEX_WIDTH * 1.5 : j * Initializer.HEX_WIDTH * 1.5 + Initializer.HEX_WIDTH * .75
                 const y = Initializer.HEX_HEIGHT / 2 * i
                 const z = NoiseMap[j][i]
                 const biome = Initializer.getBiome(j, i, biomeMap)
-                Initializer.MAP.appendChild(new Hex(x, y, z, biome))
+                const hex = new Hex(x, y, z, biome)
+                hexMap.push(hex)
             }
         }
+        return hexMap
     }
 
     private static getBiome(x: number, y: number, biomeMap: number[][]): Biome {

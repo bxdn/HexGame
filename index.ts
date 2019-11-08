@@ -1,2 +1,2 @@
-import { Initializer } from "./Initializer.js"
-Initializer.initialize()
+import { Game } from "./Game.js"
+new Game().start()

@@ -57,6 +57,7 @@ class Hex extends Image {
         this.addEventListener("mousedown", function () {
             that.src = "housing.png";
         });
+        Hex.map.appendChild(this);
     }
     getX() {
         return this._x;
