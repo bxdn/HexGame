@@ -63,8 +63,8 @@ class Initializer {
 
     private static assignListeners() {
         Initializer.MAP_CONTAINER.addEventListener(Initializer.WHEEL, Initializer.scroll)
-        Initializer.MAP.addEventListener("mousedown", Initializer.toggleDrag)
-        Initializer.MAP.addEventListener("contextmenu",Initializer.preventContextMenu)
+        Initializer.MAP_CONTAINER.addEventListener("mousedown", Initializer.toggleDrag)
+        Initializer.MAP_CONTAINER.addEventListener("contextmenu",Initializer.preventContextMenu)
         window.addEventListener(Initializer.KEYDOWN, Initializer.keyDown)
         window.addEventListener(Initializer.KEYUP, Initializer.keyUp)
         Initializer.saveBtn.addEventListener("mousedown", Initializer.save)
@@ -81,8 +81,8 @@ class Initializer {
         }
         Initializer.mouseX = event.clientX
         Initializer.mouseY = event.clientY
-        Initializer.MAP.addEventListener("mouseup", Initializer.stopDrag)
-        Initializer.MAP.addEventListener("mousemove", Initializer.drag)
+        Initializer.MAP_CONTAINER.addEventListener("mouseup", Initializer.stopDrag)
+        Initializer.MAP_CONTAINER.addEventListener("mousemove", Initializer.drag)
     }
 
     private static drag(event: MouseEvent){
@@ -97,7 +97,7 @@ class Initializer {
     }
 
     private static stopDrag() {
-        Initializer.MAP.removeEventListener("mousemove", Initializer.drag)
+        Initializer.MAP_CONTAINER.removeEventListener("mousemove", Initializer.drag)
     }
 
     private static clear() {
